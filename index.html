@@ -92,7 +92,12 @@
     max-width: 900px;
     aspect-ratio: 16 / 9;
 }
-
+.max-w-3xl{
+  max-width: 60rem !important;
+}
+.max-w-xl{
+  max-width: 40rem !important;
+}
 .video-container iframe {
     width: 100%;
     height: 100%;
@@ -250,14 +255,13 @@
 
         <!-- Headline -->
         <h1 class="reveal mx-auto mt-2 max-w-3xl font-display text-[28px] leading-[1.15] font-extrabold tracking-tight text-ink min-[400px]:text-[34px] sm:text-[52px]" style="--d:80ms">
-         <span class="block">Every successful investor has a system.
-</span>
-<span class="block text-green-400">What's yours?</span>
+         <span class="block">Every successful <span class="text-green-400">investor</span> has a <span class="text-green-400">system</span>.</span>
+<span class="block"><span class="text-green-400">What's</span> yours?</span>
         </h1>
 
         <!-- Sub heading -->
         <p class="reveal mx-auto mt-5 max-w-xl text-[16px] leading-relaxed text-muted sm:text-[18px]" style="--d:160ms">
-          You're in. Here's the <span class="text-ink font-medium">edge most investors never see</span> — press play.
+          You're in. Here's the <span class="text-ink font-medium">edge most investors never know</span> — press play.
         </p>
 
         <!-- ===== Premium video player (click-to-play facade, YouTube) ===== -->
@@ -295,6 +299,21 @@
           <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-line text-glow" aria-hidden="true"></i>Data-driven</span>
           <span class="flex items-center gap-1.5"><i class="fa-solid fa-robot text-glow" aria-hidden="true"></i>Rule-based</span>
           <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-glow" aria-hidden="true"></i>Risk-managed</span>
+        </div>
+
+        <!-- Trust links: verified P&L + Trustpilot -->
+        <div class="reveal mx-auto mt-6 flex flex-wrap items-center justify-center gap-3" style="--d:320ms">
+          <a href="https://sigmascanner-client-verified-p-l.onrender.com/" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-[13px] font-bold text-white shadow-glow transition-transform duration-300 hover:scale-105">
+            <i class="fa-solid fa-chart-column" aria-hidden="true"></i>
+            See Verified Client P&amp;L Reports
+            <i class="fa-solid fa-arrow-right text-[11px]" aria-hidden="true"></i>
+          </a>
+          <a href="https://www.trustpilot.com/review/greensigma.in" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 rounded-full border border-line bg-panel2 px-5 py-2.5 text-[13px] font-semibold text-ink transition-colors hover:border-glow/30">
+            <i class="fa-solid fa-star text-glow" aria-hidden="true"></i>
+            Read Reviews on Trustpilot
+          </a>
         </div>
       </div>
     </section>
@@ -1167,6 +1186,12 @@ players.forEach((player, currentIndex) => {
        target="_blank"
        class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-green-600 transition duration-300">
         <i class="fa-brands fa-whatsapp text-white text-xl"></i>
+    </a>
+
+    <a href="https://www.trustpilot.com/review/greensigma.in"
+       target="_blank"
+       class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#00b67a] transition duration-300">
+        <i class="fa-solid fa-star text-white text-xl"></i>
     </a>
 
 </div>

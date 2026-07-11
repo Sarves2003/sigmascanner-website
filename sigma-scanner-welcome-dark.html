@@ -110,13 +110,13 @@
 .top-overlay {
     top: 0;
     height: 10%;
-    touch-action:none
+    touch-action: pan-y;
 }
 
 .bottom-overlay {
     bottom: 0;
     height: 10%;
-    touch-action:none
+    touch-action: pan-y;
 }
 
 
@@ -190,13 +190,13 @@
 .top-overlay {
     top: 0;
     height: 28%;
-    touch-action:none
+    touch-action: pan-y;
 }
 
 .bottom-overlay {
     bottom: 0;
     height: 15%;
-    touch-action:none
+    touch-action: pan-y;
 }}
 
 
@@ -277,7 +277,7 @@ give us
                            starts muted (mute=1) and shows an unmute control. -->
            <div class="video-container">
     <iframe
-        src="https://www.youtube.com/embed/SiDM5_Sz8Gk"
+        src="https://www.youtube-nocookie.com/embed/SiDM5_Sz8Gk?rel=0&modestbranding=1&iv_load_policy=3"
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen>
@@ -582,48 +582,43 @@ give us
   }
 
 @media (max-width: 800px) {
-    /* .vt-track {
-        display: flex;
-        gap: 16px;
-    } */
-
 	.vt-wrap{
-		width: 850px;
+		width: 100%;
 	}
 
    .vt-card {
         flex: 0 0 100%;
         max-width: 100%;
-    } 
+    }
 }
 
 
 
 
 @media (max-width: 480px) {
-    /* .vt-track {
-        display: flex;
-        gap: 16px;
-    } */
-
 	.vt-wrap{
-		width: 450px;
+		width: 100%;
 	}
 
    .vt-card {
-        flex: 0 0 150%;
+        flex: 0 0 100%;
         max-width: 100%;
-    } 
+    }
 
+    .vt-stage{
+        gap: 4px;
+    }
 
-/* @media (max-width:800px){
-	.vt-wrap{ width: 800px; }
-    .vt-heading{ font-size:19px; margin-bottom:28px; }
-    .vt-stage{ gap:6px; }
-    .vt-card{ flex:0 0 76vw; }
-    .vt-arrow{ width:34px; height:34px; font-size:13px; }
-  } */
+    .vt-arrow{
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
 
+    .vt-name{
+        padding: 12px 14px 16px;
+        font-size: 14px;
+    }
 }
 
 
@@ -810,6 +805,7 @@ track.querySelectorAll('iframe').forEach((iframe) => {
     return Math.max(0, TESTIMONIALS.length - visibleCount());
   }
   function renderDots(){
+    if (!dotsWrap) return;
     dotsWrap.innerHTML = '';
     for (let i = 0; i <= maxIndex(); i++){
       const dot = document.createElement('button');

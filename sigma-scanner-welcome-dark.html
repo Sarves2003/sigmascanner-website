@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       SIGMA SCANNER — POST LEAD-FORM WELCOME PAGE (DARK)
+       Single-file static build. Tailwind (CDN) + Font Awesome + Vanilla JS.
+       Dark theme matched to the reference site (#0B1220 navy).
+       Goal: build trust, get the welcome video watched, prime WhatsApp follow-up.
+       ============================================================ -->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ===================== SEO / META ===================== -->
+  <title>Welcome to Sigma Scanner — Watch Your 3-Minute Welcome Video</title>
+  <meta name="description" content="You're in. Watch your short Sigma Scanner welcome video to see exactly how retail investors use data — not emotion — to invest systematically across NSE & BSE." />
+  <meta name="theme-color" content="#0B1220" />
+  <meta name="robots" content="noindex, nofollow" /><!-- thank-you page: keep out of search index -->
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sigma Scanner" />
+  <meta property="og:title" content="Welcome to Sigma Scanner" />
+  <meta property="og:description" content="Watch your 3-minute welcome video and see how Sigma Scanner helps you invest with data, not emotion." />
+  <!-- TODO: replace with a hosted 1200x630 preview image -->
+  <meta property="og:image" content="https://sigmascanner.example.com/og-cover.png" />
+  <meta property="og:url" content="https://sigmascanner.example.com/welcome" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Welcome to Sigma Scanner" />
+  <meta name="twitter:description" content="Watch your 3-minute welcome video and see how Sigma Scanner helps you invest with data, not emotion." />
+  <!-- TODO: replace with a hosted 1200x630 preview image -->
+  <meta name="twitter:image" content="https://sigmascanner.example.com/og-cover.png" />
+
+  <!-- Favicon placeholder — inline Σ monogram (dark). Replace with a hosted /favicon.ico later. -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230B1220'/%3E%3Cpath d='M44 18H23l11 14-11 14h21' fill='none' stroke='%2322C55E' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <!-- ===================== FONTS ===================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+
+  <!-- ===================== TAILWIND (CDN) ===================== -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            night:   '#0B1220', // page background (matches reference)
+            panel:   '#111B2E', // card surface
+            panel2:  '#16233B', // elevated surface
+            line:    '#1E2C48', // borders / hairlines
+            primary: '#16A34A', // primary green
+            deep:    '#0F7B53', // dark green
+            glow:    '#22C55E', // bright accent (dark bg reads it well)
+            ink:     '#EAF1EE', // primary text
+            muted:   '#93A1B5', // secondary text (slate)
+          },
+          fontFamily: {
+            display: ['Manrope', 'system-ui', 'sans-serif'],
+            sans:    ['Inter', 'system-ui', 'sans-serif'],
+            mono:    ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          maxWidth: { content: '1200px' },
+          borderRadius: { card: '18px', panel: '16px', btn: '12px' },
+          boxShadow: {
+            subtle: '0 1px 2px rgba(0,0,0,.5)',
+            card:   '0 10px 34px -14px rgba(0,0,0,.7)',
+            lift:   '0 20px 52px -16px rgba(0,0,0,.75)',
+            video:  '0 44px 90px -34px rgba(0,0,0,.85)',
+            glow:   '0 0 0 1px rgba(34,197,94,.18), 0 24px 60px -22px rgba(16,163,74,.40)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- ===================== FONT AWESOME (CDN) ===================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <!-- ===================== SMALL CUSTOM STYLES ===================== -->
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    
+
+    .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background: transparent;
+}
+
+.top-overlay {
+    top: 0;
+    height: 10%;
+    touch-action:none
+}
+
+.bottom-overlay {
+    bottom: 0;
+    height: 10%;
+    touch-action:none
+}
+
+
+    /* Scroll-reveal (fade up) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+      transition-delay: var(--d, 0ms);
+      will-change: opacity, transform;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* Faint quant grid, hero only */
+    .quant-grid {
+      background-image:
+        linear-gradient(to right, rgba(148,161,181,.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148,161,181,.08) 1px, transparent 1px);
+      background-size: 44px 44px;
+      -webkit-mask-image: radial-gradient(ellipse 72% 60% at 50% 8%, #000 0%, transparent 68%);
+              mask-image: radial-gradient(ellipse 72% 60% at 50% 8%, #000 0%, transparent 68%);
+    }
+    /* Soft emerald glow behind the hero video */
+    .hero-glow {
+      background: radial-gradient(ellipse 55% 45% at 50% 32%, rgba(34,197,94,.16), transparent 70%);
+    }
+
+
+    /* Click-to-play video facade */
+    .video-shell { aspect-ratio: 16 / 9; }
+    .play-btn::after {
+      content: '';
+      position: absolute; inset: -14px; border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,.55);
+      animation: pulse 2.6s ease-out infinite;
+    }
+    @keyframes pulse {
+      0%   { transform: scale(.9); opacity: .8; }
+      70%  { transform: scale(1.35); opacity: 0; }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
+
+    /* Accessible focus ring */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #22C55E; outline-offset: 3px; border-radius: 12px;
+    }
+
+
+    @media(max-width:480px){
+       .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background: transparent;
+}
+
+.top-overlay {
+    top: 0;
+    height: 28%;
+    touch-action:none
+}
+
+.bottom-overlay {
+    bottom: 0;
+    height: 15%;
+    touch-action:none
+}}
+
+
+    /* Respect reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .play-btn::after { animation: none; }
+      * { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-night text-ink antialiased selection:bg-primary/25 selection:text-white">
+
+  
+
+  
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="w-full border-b border-line/60">
+    <div class="mx-auto max-w-content px-6 py-5 flex items-center justify-between">
+      <!-- Brand mark: Σ monogram + wordmark -->
+      <a href="#top" class="flex items-center gap-2.5" aria-label="Sigma Scanner home">
+        <!-- <span class="inline-flex h-9 w-9 items-center justify-center rounded-[11px] bg-panel2 text-glow ring-1 ring-line">
+          <svg viewBox="0 0 64 64" class="h-5 w-5" aria-hidden="true">
+            <path d="M44 18H23l11 14-11 14h21" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span> -->
+     
+       <img src="../image/logo-dark.png" alt="Sigma Scanner Logo" class="h-9 w-auto" /> 
+
+       
+      </a>
+          <!-- <link rel="icon" type="image/x-icon" href="image/green_sigma_logo.png"> -->
+    </div>
+  </header>
+
+  <div id="top"></div>
+
+  <main>
+    <!-- ============================================================
+         SECTION 1 — HERO + WELCOME VIDEO
+         ============================================================ -->
+    <section class="relative overflow-hidden">
+      <div class="pointer-events-none absolute inset-0 quant-grid" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute inset-0 hero-glow" aria-hidden="true"></div>
+
+      <div class="relative mx-auto max-w-content px-6 pt-10 pb-16 sm:pt-16 sm:pb-24 text-center">
+
+        <!-- Welcome badge -->
+        <span class="text-sm font-bold uppercase tracking-[0.35em] text-green-400 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]">
+    WELCOME TO SIGMA SCANNER
+</span>
+
+        <!-- Headline -->
+        <h1 class="reveal mx-auto mt-7 max-w-3xl font-display text-[34px] leading-[1.1] font-extrabold tracking-tight text-ink sm:text-[52px]" style="--d:80ms">
+         Before you invest
+<span class="text-green-400">another rupee</span>,
+give us
+<span class="text-green-400">three minutes.</span>
+        </h1>
+
+        <!-- Sub heading -->
+        <p class="reveal mx-auto mt-5 max-w-xl text-[16px] leading-relaxed text-muted sm:text-[18px]" style="--d:160ms">
+          Thank you for registering. We've prepared a short welcome video that shows
+          exactly how Sigma Scanner helps retail investors act on
+          <span class="text-ink font-medium">data — not emotion</span>.
+        </p>
+
+        <!-- ===== Premium video player (click-to-play facade, YouTube) ===== -->
+        <div class="reveal mx-auto mt-10 max-w-4xl" style="--d:240ms">
+          <div id="video" class="video-shell relative overflow-hidden rounded-card border border-line bg-panel shadow-video">
+            <!-- Welcome video: autoplays in-frame on load.
+                           To change it, swap the video id (SiDM5_Sz8Gk) in the src below.
+                           Note: browsers autoplay reliably only when muted, so the player
+                           starts muted (mute=1) and shows an unmute control. -->
+           <div class="video-container">
+    <iframe
+        src="https://www.youtube.com/embed/SiDM5_Sz8Gk"
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+    </iframe>
+
+    <!-- Block top 10% -->
+    <div class="overlay top-overlay"></div>
+
+    <!-- Block bottom 10% -->
+    <div class="overlay bottom-overlay"></div>
+</div>
+
+
+          <p class="mt-4 text-[13px] font-mono text-muted">
+            <i class="fa-solid fa-lock text-glow" aria-hidden="true"></i>
+            No sales pitch · Just how the system works
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 2 — CEO / FOUNDER INTRODUCTION
+         ============================================================ -->
+    <section class="mx-auto max-w-content px-6 py-16 sm:py-20">
+      <div class="reveal rounded-card border border-line bg-panel p-8 shadow-card sm:p-12">
+        <div class="grid items-center gap-10 md:grid-cols-[220px,1fr]">
+
+          <!-- Circular founder image. Replace src with a real headshot. -->
+          <div class="mx-auto md:mx-0">
+            <div class="relative">
+              <!-- Founder photo (embedded). Replace the data URI to change it. -->
+              <img
+                src="data:image/jpeg;base64,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"
+                alt="Tamil Selvan, Founder & CEO of Sigma Scanner"
+                class="h-40 w-40 rounded-full object-cover object-top ring-4 ring-night shadow-lift sm:h-52 sm:w-52" />
+              <!-- <span class="absolute -bottom-1 -right-1 inline-flex h-11 w-11 items-center justify-center rounded-full bg-panel2 text-glow ring-1 ring-line shadow-lift"> -->
+                <!-- <svg viewBox="0 0 64 64" class="h-5 w-5" aria-hidden="true"> -->
+                  <path d="M44 18H23l11 14-11 14h21" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Founder copy (≤120 words) -->
+          <div>
+            <span class="text-[12.5px] font-mono font-semibold uppercase tracking-widest text-glow">Meet our founder</span>
+            <h2 class="mt-3 font-display text-[26px] font-extrabold tracking-tight text-ink sm:text-[30px]">
+              Built by a quant, for retail investors
+            </h2>
+            <p class="mt-4 max-w-2xl text-[15.5px] leading-relaxed text-muted">
+              I began my career as a Data Scientist, building systems powered by data,
+              analytics, and machine learning. That experience shaped my belief that
+              investing should be driven by evidence — not emotions. Sigma Scanner was
+              built to help retail investors make disciplined, data-backed investment
+              decisions with confidence.
+            </p>
+
+            <!-- Signature-style name block -->
+            <div class="mt-6">
+              <p class="font-display text-[20px] font-bold text-ink">Tamil Selvan</p>
+              <p class="text-[13px] font-mono text-muted">Founder &amp; CEO · Sigma Scanner</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 3 — WHY THOUSANDS TRUST SIGMA SCANNER
+         ============================================================ -->
+    <section class="mx-auto max-w-content px-6 pb-16 sm:pb-20">
+      <div class="reveal text-center">
+        <span class="text-[12.5px] font-mono font-semibold uppercase tracking-widest text-glow">Why it works</span>
+        <h2 class="mt-3 font-display text-[28px] font-extrabold tracking-tight text-ink sm:text-[34px]">
+          Why thousands trust Sigma Scanner
+        </h2>
+      </div>
+
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- 1 -->
+        <div class="reveal group rounded-panel border border-line bg-panel p-6 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:0ms">
+          <div class="inline-flex h-11 w-11 items-center justify-center rounded-[12px] bg-glow/10 text-glow transition-transform duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-chart-line text-[18px]" aria-hidden="true"></i>
+          </div>
+          <h3 class="mt-4 font-display text-[17px] font-bold text-ink">Data-driven investing</h3>
+          <p class="mt-1.5 text-[14px] leading-relaxed text-muted">No guessing — every decision is backed by quantitative analysis.</p>
+        </div>
+        <!-- 2 -->
+        <div class="reveal group rounded-panel border border-line bg-panel p-6 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:80ms">
+          <div class="inline-flex h-11 w-11 items-center justify-center rounded-[12px] bg-glow/10 text-glow transition-transform duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-gears text-[18px]" aria-hidden="true"></i>
+          </div>
+          <h3 class="mt-4 font-display text-[17px] font-bold text-ink">Automation</h3>
+          <p class="mt-1.5 text-[14px] leading-relaxed text-muted">Portfolio management, simplified into a repeatable workflow.</p>
+        </div>
+        <!-- 3 -->
+        <div class="reveal group rounded-panel border border-line bg-panel p-6 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:160ms">
+          <div class="inline-flex h-11 w-11 items-center justify-center rounded-[12px] bg-glow/10 text-glow transition-transform duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-shield-halved text-[18px]" aria-hidden="true"></i>
+          </div>
+          <h3 class="mt-4 font-display text-[17px] font-bold text-ink">Risk-focused</h3>
+          <p class="mt-1.5 text-[14px] leading-relaxed text-muted">Disciplined rules built to help you manage risk, not chase it.</p>
+        </div>
+        <!-- 4 -->
+        <div class="reveal group rounded-panel border border-line bg-panel p-6 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:240ms">
+          <div class="inline-flex h-11 w-11 items-center justify-center rounded-[12px] bg-glow/10 text-glow transition-transform duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-users text-[18px]" aria-hidden="true"></i>
+          </div>
+          <h3 class="mt-4 font-display text-[17px] font-bold text-ink">Growing community</h3>
+          <p class="mt-1.5 text-[14px] leading-relaxed text-muted">Trusted by 5,000+ investors across India.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-content px-6 pb-16 sm:pb-20">
+      <div class="reveal text-center">
+        <span class="text-[12.5px] font-mono font-semibold uppercase tracking-widest text-glow">In their words</span>
+        <h2 class="mt-3 font-display text-[28px] font-extrabold tracking-tight text-ink sm:text-[34px]">
+          What our members say
+        </h2>
+      </div>
+
+
+
+          <!-- ============================================================
+         SECTION 4 — TESTIMONIALS
+         ============================================================ -->
+<!-- ============================================================
+  VIDEO TESTIMONIAL SLIDER — drop-in component
+  Replace the items in the TESTIMONIALS array below with your
+  real data: name, poster image (thumbnail shown before play),
+  and videoUrl (your actual video link / mp4 url).
+============================================================= -->
+<script src="https://player.vimeo.com/api/player.js"></script>
+<div class="vt-wrap">
+  <!-- <h2 class="vt-heading">Our ultimate goal is to help an individual retail investor become an<br>independent quant investor.</h2> -->
+
+  <div class="vt-stage">
+    <button class="vt-arrow vt-arrow-left" aria-label="Previous testimonial">&#10094;</button>
+
+    <div class="vt-track-viewport">
+      <div class="vt-track" id="vtTrack"></div>
+    </div>
+
+    <button class="vt-arrow vt-arrow-right" aria-label="Next testimonial">&#10095;</button>
+  </div>
+
+</div>
+
+<style>
+
+.scene{
+    width: 100%;
+    max-width: 1150px;
+    padding: 3rem 1rem;
+    background: radial-gradient(120% 100% at 50% 0, #004d2e 0%, #021407 100%);
+    border: 2px solid #04431e;
+    border-radius: 16px;
+    box-shadow: 0 0 45px rgba(0, 255, 120, 0.15);
+    position: relative;
+    /* overflow: hidden; */
+    margin: auto;
+
+}
+
+
+  .vt-wrap{
+    /* --bg:#000000; */
+    --card-bg:#0c2418;
+    --green:#27e07a;
+    --green-soft:#1c8f53;
+    --text:#eafff2;
+    --muted:#9fcdb4;
+    font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background:radial-gradient(circle at 50% 0%, #111 0%, var(--bg) 70%);
+    /* padding:56px 24px 64px; */
+    border-radius:18px;
+    width: 100%;
+    color:var(--text);
+    box-sizing:border-box;
+  }
+  .vt-heading{
+    text-align:center;
+    max-width:880px;
+    margin:0 auto 40px;
+    font-size:28px;
+    line-height:1.35;
+    font-weight:800;
+	Color:var(--white);
+    /* color:var(--green);
+    text-shadow:0 0 18px rgba(39,224,122,0.35); */
+  }
+  .vt-stage{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    max-width:1500px;
+    margin:0 auto;
+  }
+  .vt-arrow{
+    flex:0 0 auto;
+    width:46px;
+    /* height:46px; */
+    border-radius:50%;
+    /* border:1px solid var(--green-soft); */
+    background:#0a1f15;
+    /* color:var(--green); */
+    font-size:16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .vt-arrow:hover{ background:#103021; transform:scale(1.07); }
+  .vt-arrow:focus-visible{ outline:2px solid var(--green); outline-offset:2px; }
+
+  .vt-track-viewport{
+    flex:1;
+    overflow:hidden;
+  }
+  .vt-track{
+    display:flex;
+    gap:24px;
+    transition:transform .45s cubic-bezier(.22,.9,.32,1);
+  }
+
+  .vt-card{
+    flex:0 0 320px;
+    background:#fff;
+    border-radius:22px;
+    border:2px solid var(--white);
+    box-shadow:0 0 0 1px rgba(39,224,122,.15), 0 18px 40px rgba(0,0,0,.35);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .vt-media{
+    position:relative;
+    width:100%;
+    aspect-ratio:9/16;
+    background:#000;
+	overflow: hidden;
+	border-radius: 16px;
+  }
+
+  .vt-media iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+	touch-action: pan-y;
+	pointer-events: auto;
+}
+
+  .vt-media img, .vt-media video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .vt-play-btn{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+	cursor: pointer;
+	z-index: 10;
+    justify-content:center;
+    background:rgba(0,0,0,.25);
+    transition:background .2s ease;
+  }
+  .vt-media.is-playing .vt-play-btn{ display:none; }
+  .vt-media:hover .vt-play-btn{ background:rgba(0,0,0,.35); }
+  .vt-play-circle{
+    width:62px; height:62px;
+    border-radius:50%;
+    background:var(--green);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.4);
+  }
+  .vt-play-circle::after{
+    content:'';
+    border-style:solid;
+    border-width:11px 0 11px 18px;
+    border-color:transparent transparent transparent #06140e;
+    margin-left:3px;
+  }
+  .vt-name{
+    padding:16px 18px 20px;
+    font-weight:700;
+    font-size:16px;
+    color:#0a2417;
+    background:#fff;
+  }
+  .vt-name span{
+    display:block;
+    font-weight:400;
+    font-size:13px;
+    color:#3c7a5c;
+    margin-top:2px;
+  }
+
+@media (max-width: 800px) {
+    /* .vt-track {
+        display: flex;
+        gap: 16px;
+    } */
+
+	.vt-wrap{
+		width: 850px;
+	}
+
+   .vt-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+    } 
+}
+
+
+
+
+@media (max-width: 480px) {
+    /* .vt-track {
+        display: flex;
+        gap: 16px;
+    } */
+
+	.vt-wrap{
+		width: 450px;
+	}
+
+   .vt-card {
+        flex: 0 0 150%;
+        max-width: 100%;
+    } 
+
+
+/* @media (max-width:800px){
+	.vt-wrap{ width: 800px; }
+    .vt-heading{ font-size:19px; margin-bottom:28px; }
+    .vt-stage{ gap:6px; }
+    .vt-card{ flex:0 0 76vw; }
+    .vt-arrow{ width:34px; height:34px; font-size:13px; }
+  } */
+
+}
+
+
+  .vt-media {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+  .vt-dots{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:28px;
+  }
+  .vt-dot{
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--green-soft);
+    opacity:.5;
+    cursor:pointer;
+    border:none;
+    padding:0;
+  }
+  .vt-dot.is-active{ opacity:1; background:var(--green); width:22px; border-radius:5px; transition:width .2s ease; }
+
+
+
+
+</style>
+
+<script>
+(function(){
+	
+
+  const TESTIMONIALS = [
+    {
+	  
+	  iframe: "https://player.vimeo.com/video/1200675017?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+    },
+    {
+     
+      iframe: "https://player.vimeo.com/video/1202118218?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+    },
+    {
+   
+      iframe: "https://player.vimeo.com/video/1200675525?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+    },
+    {
+    
+      iframe: "https://player.vimeo.com/video/1200675540?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+    },
+	{
+  
+      iframe: "https://player.vimeo.com/video/1200675562?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+    },
+	{
+    
+      iframe: "https://player.vimeo.com/video/1200675626?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+    }
+
+
+  ];
+
+  const track = document.getElementById('vtTrack');
+  const dotsWrap = document.getElementById('vtDots');
+  const leftBtn = document.querySelector('.vt-arrow-left');
+  const rightBtn = document.querySelector('.vt-arrow-right');
+
+  // Build cards
+  TESTIMONIALS.forEach((t, i) => {
+    const card = document.createElement('div');
+    card.className = 'vt-card';
+    card.innerHTML = `
+      <div class="vt-media" data-index="${i}">
+    <iframe
+        src="${t.iframe}"
+        frameborder="0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen>
+    </iframe>
+
+    <div class="vt-play-btn">
+        <div class="vt-play-circle"></div>
+    </div>
+</div>
+
+
+</div>`;
+    track.appendChild(card);
+  });
+
+  const players = [];
+
+
+// Handle click-to-play behaviour: pause all other videos, play selected video, hide green button
+track.addEventListener('click', async (e) => {
+    const playBtn = e.target.closest('.vt-play-btn');
+
+    if (!playBtn) return;
+
+    const media = playBtn.closest('.vt-media');
+    const idx = Number(media.dataset.index);
+
+   // Hide custom play button
+    playBtn.style.display = 'none';
+
+    // Show Vimeo controls
+    const iframe = media.querySelector('iframe');
+    iframe.style.pointerEvents = 'auto';
+
+    // Attempt play
+    players[idx].play().catch(() => {
+        console.log('User must tap Vimeo play button on this device.');
+    });
+});
+
+players.forEach((player, idx) => {
+    player.on('pause', () => {
+        const btn = document.querySelector(
+            `.vt-media[data-index="${idx}"] .vt-play-btn`
+        );
+
+        if (btn) {
+            btn.style.display = 'flex';
+        }
+    });
+
+    player.on('play', () => {
+        const btn = document.querySelector(
+            `.vt-media[data-index="${idx}"] .vt-play-btn`
+        );
+
+        if (btn) {
+            btn.style.display = 'none';
+        }
+    });
+});
+
+
+
+//   // Click-to-play behaviour: swap poster <img> for a real <video>, paused by default
+//   track.addEventListener('click', (e) => {
+//     const media = e.target.closest('.vt-media');
+//     if (!media || media.classList.contains('is-playing')) return;
+//     const idx = +media.dataset.index;
+//     const t = TESTIMONIALS[idx];
+
+//     const video = document.createElement('video');
+//     video.src = t.videoUrl;
+//     video.controls = true;
+//     video.playsInline = true;
+//     // not autoplay — user asked for click-to-play, paused by default
+//     media.querySelector('img').remove();
+//     media.classList.add('is-playing');
+//     media.appendChild(video);
+//     video.play();
+//   });
+
+track.querySelectorAll('iframe').forEach((iframe) => {
+    players.push(new Vimeo.Player(iframe));
+});
+
+
+  // Slider logic
+  let index = 0;
+  function cardWidth() {
+    const card = track.querySelector('.vt-card');
+    if (!card) return 0;
+    const gap = parseFloat(getComputedStyle(track).gap) || 24;
+    return card.offsetWidth + gap;
+}
+
+
+ function visibleCount() {
+    if (window.innerWidth <= 768) {
+        return 1;
+    }
+    const viewport = track.parentElement.getBoundingClientRect().width;
+    return Math.max(1, Math.floor(viewport / cardWidth()));
+}
+  function maxIndex(){
+    return Math.max(0, TESTIMONIALS.length - visibleCount());
+  }
+  function renderDots(){
+    dotsWrap.innerHTML = '';
+    for (let i = 0; i <= maxIndex(); i++){
+      const dot = document.createElement('button');
+      dot.className = 'vt-dot' + (i === index ? ' is-active' : '');
+      dot.addEventListener('click', () => { index = i; update(); });
+      dotsWrap.appendChild(dot);
+    }
+  }
+function update() {
+    index = Math.min(Math.max(0, index), maxIndex());
+
+    track.style.transform =
+        `translateX(-${index * cardWidth()}px)`;
+
+    players.forEach((player, i) => {
+        if (i !== index) {
+            player.pause().catch(() => {});
+        }
+    });
+
+    renderDots();
+}
+
+
+  leftBtn.addEventListener('click', () => { index--; update(); });
+  rightBtn.addEventListener('click', () => { index++; update(); });
+  window.addEventListener('resize', update);
+
+  // Touch swipe support (mobile)
+  let touchStartX = 0;
+  let touchDeltaX = 0;
+  const viewport = track.parentElement;
+
+  viewport.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchDeltaX = 0;
+    track.style.transition = 'none';
+  }, { passive: true });
+
+  viewport.addEventListener('touchstart', () => {
+    if (players[index]) {
+        players[index].pause().catch(() => {});
+    }
+});
+  viewport.addEventListener('touchmove', (e) => {
+    touchDeltaX = e.touches[0].clientX - touchStartX;
+    track.style.transform = `translateX(${-(index * cardWidth()) + touchDeltaX}px)`;
+  }, { passive: true });
+
+  viewport.addEventListener('touchend', () => {
+    track.style.transition = '';
+    const threshold = 50;
+    if (touchDeltaX < -threshold) index++;
+    else if (touchDeltaX > threshold) index--;
+    update();
+
+  });
+
+  update();
+
+
+  players.forEach((player, idx) => {
+    player.on('ended', () => {
+        const next = idx + 1;
+
+        if (next < players.length) {
+            index = next;
+            update();
+
+            players[next].play();
+        }
+    });
+});
+
+players.forEach((player, currentIndex) => {
+    player.on('play', () => {
+        players.forEach((p, i) => {
+            if (i !== currentIndex) {
+                p.pause();
+            }
+        });
+
+        index = currentIndex;
+        update();
+    });
+});
+
+
+
+})();
+</script>
+
+
+
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        <!-- Testimonial 1 -->
+        <figure class="reveal flex h-full flex-col rounded-card border border-line bg-panel p-7 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:0ms">
+          <div class="mb-3 text-glow" aria-label="Rated 5 out of 5">
+            <i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i>
+          </div>
+          <blockquote class="flex-1 text-[15px] leading-relaxed text-ink">
+            "It is the best I have seen in my 5 years of the stock market. Backtest results were excellent and it captured many multibaggers with 200% to 600% returns in single stocks. Also I manually validated the accuracy. I got a hope to make excellent profit in share market as a layman."
+          </blockquote>
+          <figcaption class="mt-6 flex items-center gap-3">
+            <!-- <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=70" alt="" class="h-11 w-11 rounded-full object-cover ring-1 ring-line" /> -->
+            <div>
+              <p class="font-display text-[14px] font-bold text-ink">Mathi</p>
+              
+            </div>
+          </figcaption>
+        </figure>
+
+        <!-- Testimonial 2 -->
+        <figure class="reveal flex h-full flex-col rounded-card border border-line bg-panel p-7 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:100ms">
+          <div class="mb-3 text-glow" aria-label="Rated 5 out of 5">
+            <i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i>
+          </div>
+          <blockquote class="flex-1 text-[15px] leading-relaxed text-ink">
+            "The only way in share market to make decent return in a logical way. After a search of 10 years, I got the gem which gives me full control over my portfolio without depending on mutual fund & smallcase managers. The only platform to back-test our portfolio before going live."
+          </blockquote>
+          <figcaption class="mt-6 flex items-center gap-3">
+            <!-- <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=70" alt="" class="h-11 w-11 rounded-full object-cover ring-1 ring-line" /> -->
+            <div>
+              <p class="font-display text-[14px] font-bold text-ink">Dushyanth Chandran</p>
+
+            </div>
+          </figcaption>
+        </figure>
+
+        <!-- Testimonial 3 -->
+        <figure class="reveal flex h-full flex-col rounded-card border border-line bg-panel p-7 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:200ms">
+          <div class="mb-3 text-glow" aria-label="Rated 5 out of 5">
+            <i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i>
+          </div>
+          <blockquote class="flex-1 text-[15px] leading-relaxed text-ink">
+            "Momentum score-based logic is very reliable, and we don't have to go through stock details to find good stocks. Based on our needs, we can choose an aggressive or moderate portfolio. Drawdown-arresting mechanisms help restrict any loss. The team is continuously improving the tool's usability and adding new features for our benefit."
+          </blockquote>
+          <figcaption class="mt-6 flex items-center gap-3">
+            <!-- <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=120&q=70" alt="" class="h-11 w-11 rounded-full object-cover ring-1 ring-line" /> -->
+            <div>
+              <p class="font-display text-[14px] font-bold text-ink">Parthiban</p>
+              
+            </div>
+          </figcaption>
+        </figure>
+
+
+      <!-- Testimonial 4 -->
+        <figure class="reveal flex h-full flex-col rounded-card border border-line bg-panel p-7 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:200ms">
+          <div class="mb-3 text-glow" aria-label="Rated 5 out of 5">
+            <i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i>
+          </div>
+          <blockquote class="flex-1 text-[15px] leading-relaxed text-ink">
+            "It's really nice to watch a good result using your Sigma Scanner for almost 2 months. Bunch of thanks for your hard work and bringing it to the common man. Though the Nifty goes down drastically, the stocks picked by the system are not moving that much in the negative. It beats FD — decent return more than FD. Once again thanks."
+          </blockquote>
+          <figcaption class="mt-6 flex items-center gap-3">
+            <!-- <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=120&q=70" alt="" class="h-11 w-11 rounded-full object-cover ring-1 ring-line" /> -->
+            <div>
+              <p class="font-display text-[14px] font-bold text-ink">Veeramani</p>
+              
+            </div>
+          </figcaption>
+        </figure>
+
+
+
+        <!-- Testimonial 5 -->
+        <figure class="reveal flex h-full flex-col rounded-card border border-line bg-panel p-7 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:200ms">
+          <div class="mb-3 text-glow" aria-label="Rated 5 out of 5">
+            <i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i>
+          </div>
+          <blockquote class="flex-1 text-[15px] leading-relaxed text-ink">
+            "Sigma Scanner platform is a very useful and scientific way of approaching investment plans for every kind of people, especially for job-going and business people. Tension free — helps us save our time instead of spending all our time in searching stocks."
+          </blockquote>
+          <figcaption class="mt-6 flex items-center gap-3">
+            <!-- <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=120&q=70" alt="" class="h-11 w-11 rounded-full object-cover ring-1 ring-line" /> -->
+            <div>
+              <p class="font-display text-[14px] font-bold text-ink">Vasu Nathan</p>
+              
+            </div>
+          </figcaption>
+        </figure>
+
+
+        <!-- Testimonial 6 -->
+        <figure class="reveal flex h-full flex-col rounded-card border border-line bg-panel p-7 transition-all duration-300 hover:-translate-y-1 hover:border-glow/30 hover:shadow-glow" style="--d:200ms">
+          <div class="mb-3 text-glow" aria-label="Rated 5 out of 5">
+            <i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i><i class="fa-solid fa-star text-[13px]"></i>
+          </div>
+          <blockquote class="flex-1 text-[15px] leading-relaxed text-ink">
+            "GS is quite a unique community which provides value like no other, as it mainly focuses on adding value to the members than making money out of it. Their momentum investment strategy is backed with rigorous backtesting and I myself witnessed its potential."
+          </blockquote>
+          <figcaption class="mt-6 flex items-center gap-3">
+            <!-- <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=120&q=70" alt="" class="h-11 w-11 rounded-full object-cover ring-1 ring-line" /> -->
+            <div>
+              <p class="font-display text-[14px] font-bold text-ink">Prem Pranav</p>
+              
+            </div>
+          </figcaption>
+        </figure>
+
+      </div>
+    </section>
+
+
+
+    
+  </main>
+
+  <!-- ============================================================
+       SECTION 5 — FOOTER
+       ============================================================ -->
+  <footer class="border-t border-line bg-panel/40">
+    <div class="mx-auto max-w-content px-6 py-12">
+      <div class="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-start">
+        <div class="text-center sm:text-left">
+          <div class="flex items-center justify-center gap-2.5 sm:justify-start">
+            <!-- <span class="inline-flex h-8 w-8 items-center justify-center rounded-[10px] bg-panel2 text-glow ring-1 ring-line"> -->
+              <!-- <svg viewBox="0 0 64 64" class="h-4 w-4" aria-hidden="true"> -->
+                <path d="M44 18H23l11 14-11 14h21" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="font-display text-[15px] font-bold text-ink">sigma<span class="text-glow">scanner</span></span>
+          </div>
+          <p class="mt-3 text-[13px] text-muted">Built with <span class="text-glow">❤</span> for serious investors.</p>
+        </div>
+
+        <nav class="flex items-center gap-6 text-[13px] font-medium text-muted" aria-label="Footer">
+          <div class="flex items-center gap-4">
+
+    <a href="https://instagram.com/investwithgreensigma"
+       target="_blank"
+       class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-pink-600 transition duration-300">
+        <i class="fa-brands fa-instagram text-white text-xl"></i>
+    </a>
+
+    <a href="https://youtube.com/@investwithgreensigma"
+       target="_blank"
+       class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-red-600 transition duration-300">
+        <i class="fa-brands fa-youtube text-white text-xl"></i>
+    </a>
+
+    <a href="https://wa.me/918122607208?text=Hi%20Sigma%20Scanner%2C%20I%20just%20watched%20the%20welcome%20video."
+       target="_blank"
+       class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-green-600 transition duration-300">
+        <i class="fa-brands fa-whatsapp text-white text-xl"></i>
+    </a>
+
+</div>
+        </nav>
+      </div>
+
+      <div class="mt-8 border-t border-line pt-6 text-center sm:text-left">
+        <p class="text-[12px] leading-relaxed text-muted">
+          Past performance is not indicative of future results. Nothing on this page is investment advice.
+        </p>
+        <p class="mt-2 text-[12px] font-mono text-muted">
+          © <span id="year">2026</span> GreenSigma Consultancy Pvt. Ltd. · All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       STICKY FLOATING WHATSAPP BUTTON
+       ============================================================ -->
+  <a href="https://wa.me/918122607208?text=Hi%20Sigma%20Scanner%2C%20I%20just%20watched%20the%20welcome%20video."
+     target="_blank" rel="noopener"
+     class="group fixed bottom-5 right-5 z-50 flex items-center gap-2.5 rounded-full bg-[#25D366] py-3 pl-3 pr-5 text-white shadow-lift transition-transform duration-300 hover:scale-105"
+     aria-label="Chat with us on WhatsApp">
+    <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+      <i class="fa-brands fa-whatsapp text-[20px]" aria-hidden="true"></i>
+    </span>
+    <span class="text-[14px] font-semibold">Chat with us</span>
+  </a>
+
+  <!-- ============================================================
+       VANILLA JS
+       ============================================================ -->
+  <script>
+    // Year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Fade-up reveal on scroll
+    (function () {
+      var items = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
+      items.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+
+<script src="js/data.js"></script>
+
+</body>
+</html>
